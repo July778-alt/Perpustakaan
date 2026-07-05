@@ -24,37 +24,19 @@ const navItems = [
     href: "/home",
   },
   {
-    title: "Browse Books",
-    icon: BookOpen,
-    href: "/home",
-  },
-  {
     title: "My Borrowings",
     icon: Clock,
     href: "/my-borrowings",
-  },
-  {
-    title: "My Profile",
-    icon: User,
-    href: "/profile",
   },
 ];
 
 export function AppSidebar_public({ ...props }) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="border-b p-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl shadow-lg">
-            <Library className="h-5 w-5 text-white" />
-          </div>
-          <div className="group-data-[collapsible=icon]:hidden">
-            <h2 className="font-bold text-sm bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-              Student Portal
-            </h2>
-            <p className="text-xs text-gray-500">Library Access</p>
-          </div>
-        </div>
+      <SidebarHeader className="">
+        <SidebarFooter className="">
+          <NavUser user={props.user} />
+        </SidebarFooter>
       </SidebarHeader>
 
       <SidebarContent className="p-2">
@@ -75,10 +57,6 @@ export function AppSidebar_public({ ...props }) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
-      <SidebarFooter className="p-2">
-        <NavUser user={props.user} />
-      </SidebarFooter>
 
       <SidebarRail />
     </Sidebar>

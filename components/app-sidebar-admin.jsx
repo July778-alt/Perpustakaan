@@ -55,18 +55,10 @@ const navData = {
 export function AppSidebar_admin({ onNavigate, ...props }) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="border-b p-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl shadow-lg">
-            <Shield className="h-5 w-5 text-white" />
-          </div>
-          <div className="group-data-[collapsible=icon]:hidden">
-            <h2 className="font-bold text-sm bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Admin Portal
-            </h2>
-            <p className="text-xs text-gray-500">Management System</p>
-          </div>
-        </div>
+      <SidebarHeader className="">
+        <SidebarFooter className="">
+          <NavUser user={props.user} />
+        </SidebarFooter>
       </SidebarHeader>
 
       <SidebarContent className="gap-2 p-2">
@@ -79,8 +71,7 @@ export function AppSidebar_admin({ onNavigate, ...props }) {
               <SidebarGroupLabel
                 asChild
                 className="group/label text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg px-3 py-2 text-sm font-semibold">
-                <CollapsibleTrigger className="flex items-center gap-2">
-                  {section.icon && <section.icon className="h-4 w-4" />}
+                <CollapsibleTrigger className="flex items-center gap-2 cursor-pointer">
                   <span>{section.title}</span>
                   <ChevronRight className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-90" />
                 </CollapsibleTrigger>
@@ -93,10 +84,10 @@ export function AppSidebar_admin({ onNavigate, ...props }) {
                       <SidebarMenuItem key={item.key}>
                         <SidebarMenuButton 
                           asChild 
-                          className="hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors"
+                          className="hover:bg-blue-50 hover:text-blue-700 rounded-lg transition-colors p-4 gap-4"
                         >
                           <button 
-                            className="w-full flex items-center gap-3 px-3 py-2" 
+                            className="w-full flex items-center gap-3 px-3 py-2 cursor-pointer" 
                             onClick={() => onNavigate(item.key, section.title)}
                           >
                             {item.icon && <item.icon className="h-4 w-4" />}
@@ -112,11 +103,6 @@ export function AppSidebar_admin({ onNavigate, ...props }) {
           </Collapsible>
         ))}
       </SidebarContent>
-
-      <SidebarFooter className="p-2">
-        <NavUser user={props.user} />
-      </SidebarFooter>
-
       <SidebarRail />
     </Sidebar>
   );

@@ -7,7 +7,7 @@ import { FieldLabel } from "./ui/field";
 import { storeBooks, getAllBooks, deleteBooks, updateBooks } from "@/lib/action";
 import { 
   X, Plus, Edit, BookOpen,
-  Search, Package, Trash2, Image as ImageIcon, AlertCircle,
+  Search, Package, Trash2, Image as ImageIcon, Book, BookAlert
   
 } from "lucide-react";
 
@@ -39,12 +39,10 @@ export default function BooksTable() {
     setShowPopupEdit(false);
   }
 
-  // Filter books
   const filteredBooks = books.filter(book => 
     book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     book.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    book.publisher.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (book.sinopsis && book.sinopsis.toLowerCase().includes(searchQuery.toLowerCase()))
+    book.publisher.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -53,16 +51,13 @@ export default function BooksTable() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-xl">
-              <BookOpen className="h-6 w-6 text-white" />
-            </div>
             Books Management
           </h1>
-          <p className="text-gray-500 mt-1 ml-14">Manage your library collection</p>
+          <p className="text-gray-500 mt-1">Manage your library collection</p>
         </div>
         <Button 
           onClick={() => setShowPopup(true)} 
-          className="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg shadow-emerald-500/30 transition-all duration-200"
+          className="flex items-center gap-2 bg-linear-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg shadow-emerald-500/30 transition-all duration-200"
         >
           <Plus className="h-5 w-5" />
           Add Book
@@ -75,7 +70,7 @@ export default function BooksTable() {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
           <input
             type="text"
-            placeholder="Search by title, author, publisher, or sinopsis..."
+            placeholder="Search by title, author, publisher"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
@@ -84,68 +79,54 @@ export default function BooksTable() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-6 border border-emerald-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-emerald-600 text-sm font-medium">Total Books</p>
-              <p className="text-3xl font-bold text-emerald-900 mt-1">{books.length}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-linear-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-blue-600 text-sm font-medium">Total Books</p>
+                        <p className="text-3xl font-bold text-blue-900 mt-1">{books.length}</p>
+                    </div>
+                    <div className="p-3 bg-blue-500 rounded-lg">
+                        <Book className="text-white"/>
+                    </div>
+                </div>
             </div>
-            <div className="p-3 bg-emerald-500 rounded-lg">
-              <BookOpen className="h-6 w-6 text-white" />
+            
+            <div className="bg-linear-to-br from-purple-50 to-purple-100 rounded-xl p-6 border border-purple-200">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-purple-600 text-sm font-medium">Available</p>
+                        <p className="text-3xl font-bold text-purple-900 mt-1">
+                            {books.filter(b => b.stock > 0).length}
+                        </p>
+                    </div>
+                    <div className="p-3 bg-purple-500 rounded-lg">
+                        <BookOpen className="text-white"/>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-        
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-blue-600 text-sm font-medium">Total Stock</p>
-              <p className="text-3xl font-bold text-blue-900 mt-1">
-                {books.reduce((sum, book) => sum + book.stock, 0)}
-              </p>
-            </div>
-            <div className="p-3 bg-blue-500 rounded-lg">
-              <Package className="h-6 w-6 text-white" />
-            </div>
-          </div>
-        </div>
 
-        <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-green-600 text-sm font-medium">Available</p>
-              <p className="text-3xl font-bold text-green-900 mt-1">
-                {books.filter(b => b.stock > 0).length}
-              </p>
+            <div className="bg-linear-to-br from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <p className="text-green-600 text-sm font-medium">Out of Stock</p>
+                        <p className="text-3xl font-bold text-green-900 mt-1">
+                             {books.filter(b => b.stock === 0).length}
+                        </p>
+                    </div>
+                    <div className="p-3 bg-green-500 rounded-lg">
+                        <BookAlert className="text-white"/>
+                    </div>
+                </div>
             </div>
-            <div className="p-3 bg-green-500 rounded-lg">
-              <Package className="h-6 w-6 text-white" />
-            </div>
-          </div>
         </div>
-
-        <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-xl p-6 border border-red-200">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-red-600 text-sm font-medium">Out of Stock</p>
-              <p className="text-3xl font-bold text-red-900 mt-1">
-                {books.filter(b => b.stock === 0).length}
-              </p>
-            </div>
-            <div className="p-3 bg-red-500 rounded-lg">
-              <AlertCircle className="h-6 w-6 text-white" />
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* Table */}
       <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+              <tr className="bg-linear-to-r from-gray-50 to-gray-100 border-b border-gray-200">
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                   Book
                 </th>
@@ -185,7 +166,7 @@ export default function BooksTable() {
                   <tr key={book.id_books} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-4">
-                        <div className="relative w-12 h-16 rounded-lg overflow-hidden shadow-md flex-shrink-0 bg-gray-100">
+                        <div className="relative w-12 h-16 rounded-lg overflow-hidden shadow-md shrink-0 bg-gray-100">
                           <img 
                             src={book.image || "/book-placeholder.jpg"} 
                             alt={book.title}
@@ -193,7 +174,7 @@ export default function BooksTable() {
                           />
                         </div>
                         <div>
-                          <p className="font-semibold text-gray-900 line-clamp-2">{book.title}</p>
+                          <p className="font-semibold text-gray-900 line-clamp-1">{book.title}</p>
                           <p className="text-xs text-gray-500">ID: {book.id_books}</p>
                         </div>
                       </div>
@@ -210,7 +191,7 @@ export default function BooksTable() {
                     </td>
                     <td className="px-6 py-4 max-w-xs">
                       <div className="flex items-start gap-2">
-                        <p className="text-sm text-gray-600 line-clamp-3">
+                        <p className="text-sm text-gray-600 line-clamp-3 text-justify">
                           {book.sinopsis || "No sinopsis available"}
                         </p>
                       </div>
@@ -223,10 +204,10 @@ export default function BooksTable() {
                     <td className="px-6 py-4 text-center">
                       <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold shadow-sm ${
                         book.stock > 10 
-                          ? 'bg-gradient-to-r from-green-500 to-green-600 text-white'
+                          ? 'bg-linear-to-r from-green-500 to-green-600 text-white'
                           : book.stock > 0
-                          ? 'bg-gradient-to-r from-yellow-500 to-yellow-600 text-white'
-                          : 'bg-gradient-to-r from-red-500 to-red-600 text-white'
+                          ? 'bg-linear-to-r from-yellow-500 to-yellow-600 text-white'
+                          : 'bg-linear-to-r from-red-500 to-red-600 text-white'
                       }`}>
                         <Package className="h-3 w-3" />
                         {book.stock}
@@ -267,7 +248,7 @@ export default function BooksTable() {
         <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden animate-in fade-in zoom-in duration-200">
             {/* Header */}
-            <div className="relative bg-gradient-to-r from-emerald-600 to-teal-600 p-6">
+            <div className="relative bg-linear-to-r from-emerald-600 to-teal-600 p-6">
               <button 
                 onClick={() => setShowPopup(false)} 
                 className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors"
@@ -399,7 +380,7 @@ export default function BooksTable() {
                 </Button>
                 <Button 
                   type="submit"
-                  className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 px-6 shadow-lg shadow-emerald-500/30"
+                  className="bg-linear-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 px-6 shadow-lg shadow-emerald-500/30"
                 >
                   Add Book
                 </Button>
@@ -414,7 +395,7 @@ export default function BooksTable() {
         <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden animate-in fade-in zoom-in duration-200">
             {/* Header */}
-            <div className="relative bg-gradient-to-r from-blue-600 to-cyan-600 p-6">
+            <div className="relative bg-linear-to-r from-blue-600 to-cyan-600 p-6">
               <button 
                 onClick={() => setShowPopupEdit(false)} 
                 className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors"
@@ -443,7 +424,7 @@ export default function BooksTable() {
               <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
                 {/* Current Image Preview */}
                 {editBooks.image && (
-                  <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-xl border border-blue-200">
+                  <div className="mb-6 p-4 bg-linear-to-r from-blue-50 to-cyan-50 rounded-xl border border-blue-200">
                     <FieldLabel className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
                       <ImageIcon className="h-4 w-4 text-blue-600" />
                       Current Cover
@@ -544,6 +525,7 @@ export default function BooksTable() {
                       rows="4"
                       defaultValue={editBooks.sinopsis}
                       className="w-full p-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm resize-none"
+                      required
                     />
                   </Field>
                   
@@ -574,7 +556,7 @@ export default function BooksTable() {
                 </Button>
                 <Button 
                   type="submit"
-                  className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 px-6 shadow-lg shadow-blue-500/30"
+                  className="bg-linear-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 px-6 shadow-lg shadow-blue-500/30"
                 >
                   Update Book
                 </Button>

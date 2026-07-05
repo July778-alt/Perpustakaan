@@ -24,20 +24,17 @@ export function LoginForm({
   async function handleLogin(formData) {
     setError("");
 
-    // PERBAIKAN 1: Tambahkan await untuk signIn
     const response = await signIn("credentials", {
       redirect: false,
       email: formData.get("email"),
       password: formData.get("password")
     })
 
-    // PERBAIKAN 2: Sekarang response sudah berisi objek, bukan Promise
     if (response.error) {
       setError("Email atau password salah");
       return
     }
 
-    // PERBAIKAN 3: Fetch session setelah login berhasil
     const session = await fetch("/api/auth/session").then((res) => res.json());
     
     if (session?.user?.role === "admin") {
@@ -53,7 +50,7 @@ export function LoginForm({
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Login to your account</h1>
           <p className="text-muted-foreground text-sm text-balance">
-            Welcome back! Enter your email/username and password bellow to sign in.
+            Welcome back! Enter your email and password bellow to log in.
           </p>
         </div>
         <Field>
@@ -63,9 +60,6 @@ export function LoginForm({
         <Field>
           <div className="flex items-center">
             <FieldLabel htmlFor="password">Password</FieldLabel>
-            <a href="#" className="ml-auto text-sm underline-offset-4 hover:underline">
-              Forgot your password?
-            </a>
           </div>
           <Input id="password" type="password" name="password" placeholder="Enter your password" required />
         </Field>

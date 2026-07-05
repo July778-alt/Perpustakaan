@@ -35,7 +35,6 @@ export default function UsersTable() {
         setShowPopupEdit(false);
     }
 
-    // Filter users based on search
     const filteredUsers = users.filter(u => 
         u.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
         u.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -44,27 +43,21 @@ export default function UsersTable() {
 
   return (
     <div className="space-y-6">
-        {/* Header Section */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
                 <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-                    <div className="p-2 bg-linear-to-br from-blue-500 to-purple-600 rounded-xl">
-                        <Users className="h-6 w-6 text-white" />
-                    </div>
                     Users Management
                 </h1>
-                <p className="text-gray-500 mt-1 ml-14">Manage user accounts and permissions</p>
+                <p className="text-gray-500 mt-1">Manage user accounts and permissions</p>
             </div>
             <Button 
                 onClick={() => setShowPopup(true)} 
                 className="flex items-center gap-2 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/30 transition-all duration-200"
             >
-                <Plus className="h-5 w-5" />
                 Add User
             </Button>
         </div>
 
-        {/* Search Bar */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
             <div className="relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -78,7 +71,6 @@ export default function UsersTable() {
             </div>
         </div>
 
-        {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-linear-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
                 <div className="flex items-center justify-between">
@@ -121,7 +113,6 @@ export default function UsersTable() {
             </div>
         </div>
 
-        {/* Table */}
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
             <div className="overflow-x-auto">
                 <table className="w-full">
@@ -157,7 +148,7 @@ export default function UsersTable() {
                                 <tr key={u.id_users} className="hover:bg-gray-50 transition-colors">
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-3">
-                                            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-md overflow-hidden">
+                                            <div className="w-10 h-10 bg-linear-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-md overflow-hidden">
                                                 {u.image ? (
                                                     <img 
                                                     src={u.image} 
@@ -226,11 +217,9 @@ export default function UsersTable() {
             </div>
         </div>
 
-        {/* Add User Popup */}
         {showPopup && (
             <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 backdrop-blur-sm p-4">
                 <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-hidden animate-in fade-in zoom-in duration-200">
-                    {/* Header */}
                     <div className="relative bg-linear-to-r from-blue-600 to-purple-600 p-6">
                         <button 
                             onClick={() => setShowPopup(false)} 
@@ -311,7 +300,6 @@ export default function UsersTable() {
                             </div>
                         </div>
                         
-                        {/* Footer */}
                         <div className="flex justify-end gap-3 p-6 border-t bg-gray-50">
                             <Button 
                                 type="button"
@@ -337,7 +325,6 @@ export default function UsersTable() {
         {showPopupEdit && editUsers && (
             <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 backdrop-blur-sm p-4">
                 <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md max-h-[90vh] overflow-hidden animate-in fade-in zoom-in duration-200">
-                    {/* Header */}
                     <div className="relative bg-linear-to-r from-green-600 to-emerald-600 p-6">
                         <button 
                             onClick={() => setShowPopupEdit(false)} 
@@ -355,8 +342,7 @@ export default function UsersTable() {
                             </div>
                         </div>
                     </div>
-                    
-                    {/* Form */}
+                
                     <form action={async (formData) => {
                         await updateUsersSideAdmin(formData);
                         await handleUpdateSuccess();
@@ -408,7 +394,6 @@ export default function UsersTable() {
                                     </select>
                                 </Field>
 
-                                {/* Note about password */}
                                 <div className="p-4 bg-amber-50 border border-amber-200 rounded-xl">
                                     <div className="flex gap-3">
                                         <AlertCircle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
@@ -423,7 +408,6 @@ export default function UsersTable() {
                             </div>
                         </div>
                         
-                        {/* Footer */}
                         <div className="flex justify-end gap-3 p-6 border-t bg-gray-50">
                             <Button 
                                 type="button"

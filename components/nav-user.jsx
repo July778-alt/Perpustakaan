@@ -7,6 +7,7 @@ import {
   CreditCard,
   LogOut,
   Sparkles,
+  CircleUserRound,
 } from "lucide-react"
 
 import {
@@ -49,7 +50,7 @@ export function NavUser({ user }) {
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
+              className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground cursor-pointer">
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage src={user?.image || "/default-avatar.png"} alt={user?.name} />
                 <AvatarFallback className="rounded-lg">
@@ -87,22 +88,10 @@ export function NavUser({ user }) {
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
                 <Link href="/profile" className="flex items-center cursor-pointer">
-                  <BadgeCheck className="mr-2 h-4 w-4" />
+                  <CircleUserRound  className="mr-2 h-4 w-4" />
                   My Profile
                 </Link>
               </DropdownMenuItem>
-              {session?.user?.role === "public" && (
-                <>
-              <DropdownMenuItem className="cursor-pointer">
-                <CreditCard className="mr-2 h-4 w-4" />
-                History
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer">
-                <Bell className="mr-2 h-4 w-4" />
-                Notifications
-              </DropdownMenuItem>
-                </>
-              )}
             </DropdownMenuGroup>  
                 <DropdownMenuSeparator />
                 <DropdownMenuItem 

@@ -17,7 +17,6 @@ export function SearchForm({
 
   useEffect(() => {
     if (value.length > 0 && showSuggestions) {
-      // Generate suggestions
       const keyword = value.toLowerCase();
       
       const bookSuggestions = books
@@ -68,12 +67,10 @@ export function SearchForm({
   return (
     <div className="relative w-full" {...props}>
       <div className="relative">
-        {/* Search Icon */}
         <div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
           <Search className="h-4 w-4" />
         </div>
 
-        {/* Input Field */}
         <input
           ref={inputRef}
           type="text"
@@ -89,7 +86,7 @@ export function SearchForm({
             setIsFocused(false);
             setShowDropdown(false);
           }, 200)}
-          placeholder="Search books, authors, publishers..."
+          placeholder="Search..."
           className="
             w-full pl-10 pr-10 py-2.5
             bg-white
@@ -101,7 +98,6 @@ export function SearchForm({
           "
         />
 
-        {/* Clear Button */}
         {value && (
           <button
             type="button"
@@ -113,7 +109,6 @@ export function SearchForm({
         )}
       </div>
 
-      {/* Suggestions Dropdown */}
       {showDropdown && suggestions.length > 0 && (
         <div className="absolute top-full mt-1 left-0 right-0 z-50">
           <div className="bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">
@@ -156,7 +151,6 @@ export function SearchForm({
         </div>
       )}
 
-      {/* No Results */}
       {showDropdown && value.length > 0 && suggestions.length === 0 && (
         <div className="absolute top-full mt-1 left-0 right-0 z-50">
           <div className="bg-white border border-gray-200 rounded-lg shadow-lg">

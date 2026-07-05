@@ -16,8 +16,6 @@ export const authOption = {
         if (!credentials?.email || !credentials?.password) {
             throw new Error("Email and password required");
         }
-        // const email     = credentials.email
-        // const password  = credentials.password
 
         // 2. cari user berdasarkan email
         const user = await getUserByEmail(credentials.email);

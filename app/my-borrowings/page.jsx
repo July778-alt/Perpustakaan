@@ -92,29 +92,13 @@ export default function MyBorrowingsPage() {
         <header className="sticky top-0 bg-white/95 backdrop-blur-sm border-b h-16 flex items-center justify-between px-6 z-10 shadow-sm">
           <div className="flex items-center gap-4">
             <SidebarTrigger />
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg">
-                <Clock className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h1 className="text-lg font-bold text-gray-900">My Borrowings</h1>
-                <p className="text-xs text-gray-500">Track your borrowed books</p>
-              </div>
-            </div>
           </div>
-          
-          <Link href="/home">
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Library
-            </Button>
-          </Link>
         </header>
 
-        <main className="p-6 bg-gradient-to-br from-emerald-50 via-white to-teal-50 min-h-screen">
+        <main className="p-6 bg-linear-to-br from-emerald-50 via-white to-teal-50 min-h-screen">
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-xl p-6 text-white shadow-lg">
+            <div className="bg-linear-to-br from-yellow-500 to-yellow-600 rounded-xl p-6 text-white shadow-lg">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-yellow-100 text-sm font-medium">Pending</p>
@@ -126,7 +110,7 @@ export default function MyBorrowingsPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg">
+            <div className="bg-linear-to-br from-blue-500 to-blue-600 rounded-xl p-6 text-white shadow-lg">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-blue-100 text-sm font-medium">Reading</p>
@@ -138,7 +122,7 @@ export default function MyBorrowingsPage() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-xl p-6 text-white shadow-lg">
+            <div className="bg-linear-to-br from-green-500 to-green-600 rounded-xl p-6 text-white shadow-lg">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-green-100 text-sm font-medium">Returned</p>
@@ -167,7 +151,7 @@ export default function MyBorrowingsPage() {
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">No borrowings yet</h3>
                 <p className="text-gray-500 mb-6">Start borrowing books from our library</p>
                 <Link href="/home">
-                  <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700">
+                  <Button className="bg-linear-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700">
                     Browse Books
                   </Button>
                 </Link>
@@ -184,7 +168,7 @@ export default function MyBorrowingsPage() {
                   >
                     <div className="flex flex-col md:flex-row gap-4 p-6">
                       {/* Book Cover */}
-                      <div className="w-full md:w-32 h-40 md:h-48 flex-shrink-0 rounded-lg overflow-hidden bg-gray-100 shadow-md">
+                      <div className="w-full md:w-32 h-40 md:h-48 shrink-0 rounded-lg overflow-hidden bg-gray-100 shadow-md">
                         <img 
                           src={borrow.image || "/book-placeholder.jpg"} 
                           alt={borrow.book_title}
@@ -241,8 +225,8 @@ export default function MyBorrowingsPage() {
                             <div>
                               <p className="text-xs text-gray-600">Return Date</p>
                               <p className="font-semibold text-gray-900">
-                                {borrow.return_date 
-                                  ? new Date(borrow.return_date).toLocaleDateString('en-US', {
+                                {borrow.due_return_date 
+                                  ? new Date(borrow.due_return_date).toLocaleDateString('en-US', {
                                       year: 'numeric',
                                       month: 'long',
                                       day: 'numeric'

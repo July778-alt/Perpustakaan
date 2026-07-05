@@ -1,22 +1,24 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { useSession } from "next-auth/react";
+import { useState, useEffect, useRef, useTransition } from "react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { updateProfilePhoto, updateUserProfile } from "@/lib/action";
 import { 
   User, Mail, Shield, Camera, Save, X, 
-  BookOpen, Clock, Award, Edit2, Upload
-} from "lucide-react";
+  BookOpen, Clock } from "lucide-react";
+  import { getBorrowsByUserId } from "@/lib/action";
 
 export default function ProfilePage() {
   const { data: session, update } = useSession();
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
+  const [borrows, setBorrows] = useState([]);
   const [isUploadingPhoto, setIsUploadingPhoto] = useState(false);
   const fileInputRef = useRef(null);
+  const [isPending, startTransition] = useTransition();
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -27,6 +29,13 @@ export default function ProfilePage() {
       setFormData({
         username: session.user.name || "",
         email: session.user.email || "",
+      });
+    }
+
+    if (session?.user?.id) {
+      startTransition(async () => {
+        const data = await getBorrowsByUserId(session.user.id);
+        setBorrows(data);
       });
     }
   }, [session]);
@@ -43,7 +52,6 @@ export default function ProfilePage() {
 
       const imagePath = await updateProfilePhoto(formData);
       
-      // Update session with new image
       await update({
         ...session,
         user: {
@@ -71,7 +79,6 @@ export default function ProfilePage() {
 
       await updateUserProfile(formDataObj);
       
-      // Update session
       await update({
         ...session,
         user: {
@@ -110,7 +117,7 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8 px-4">
+    <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-purple-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -133,14 +140,15 @@ export default function ProfilePage() {
               <div className="text-center">
                 {/* Avatar */}
                 <div className="relative inline-block mb-4">
-                  <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-xl overflow-hidden">
-                    {session.user.image ? (
+                  <div className="w-32 h-32 bg-linear-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-xl overflow-hidden">
+                    {session.user.image 
+                    ? (
                       <img 
                         src={session.user.image} 
                         alt={session.user.name}
                         className="w-full h-full object-cover"
-                      />
-                    ) : (
+                      />) 
+                    : (
                       <span className="text-4xl font-bold text-white">
                         {getInitials(session.user.name)}
                       </span>
@@ -198,7 +206,9 @@ export default function ProfilePage() {
                     </div>
                     <div>
                       <p className="text-sm text-gray-600">Books Borrowed</p>
-                      <p className="font-bold text-gray-900">12</p>
+                      <p className="font-bold text-gray-900">
+                        {borrows.filter(b => b.status === 'progress').length}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -209,8 +219,8 @@ export default function ProfilePage() {
                       <Clock className="h-5 w-5 text-green-600" />
                     </div>
                     <div>
-                      <p className="text-sm text-gray-600">Active Loans</p>
-                      <p className="font-bold text-gray-900">2</p>
+                      <p className="text-sm text-gray-600">Pending</p>
+                      <p className="font-bold text-gray-900">{borrows.filter(b => b.status === 'pending').length}</p>
                     </div>
                   </div>
                 </div>
@@ -231,7 +241,6 @@ export default function ProfilePage() {
                     variant="outline"
                     className="border-blue-200 text-blue-700 hover:bg-blue-50"
                   >
-                    <Edit2 className="h-4 w-4 mr-2" />
                     Edit Profile
                   </Button>
                 )}
@@ -265,7 +274,9 @@ export default function ProfilePage() {
                       className="w-full p-3.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all bg-gray-50"
                       disabled
                     />
-                    <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                    {session?.user?.role === "public" && (
+                      <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
+                    )} 
                   </Field>
 
                   <Field>
@@ -282,13 +293,15 @@ export default function ProfilePage() {
                       className="w-full p-3.5 border border-gray-300 rounded-xl bg-gray-50 capitalize"
                       disabled
                     />
-                    <p className="text-xs text-gray-500 mt-1">Role is assigned by administrators</p>
+                    {session?.user?.role === "public" && (
+                      <p className="text-xs text-gray-500 mt-1">Role is assigned by administrators</p>
+                    )}
                   </Field>
 
                   <div className="flex gap-3 pt-4">
                     <Button
                       type="submit"
-                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/30"
+                      className="bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg shadow-blue-500/30"
                     >
                       <Save className="h-4 w-4 mr-2" />
                       Save Changes
@@ -342,39 +355,17 @@ export default function ProfilePage() {
                       <p className="text-lg font-semibold text-gray-900 capitalize">{session.user.role}</p>
                     </div>
                   </div>
+                    <div className="flex items-start gap-4 p-4">
+                      <div className="w-full">
+
+                        <button onClick={() => signOut({ callbackUrl: "/login"})} 
+                        className="bg-red-50 border border-red-200 rounded-md p-2 items-center w-full cursor-pointer text-red-600 font-semibold transition delay-75 hover:bg-red-500 hover:text-white"
+                        >LogOut</button>
+                      </div>
+                    </div>
                 </div>
               )}
             </div>
-
-            {/* Recent Activity */}
-            {session?.user?.role === "public" && (
-              <>
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-200 mt-6">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">Recent Activity</h3>
-              <div className="space-y-4">
-                <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
-                  <div className="p-2 bg-blue-100 rounded-lg">
-                    <BookOpen className="h-4 w-4 text-blue-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-900">Borrowed "The Great Gatsby"</p>
-                    <p className="text-sm text-gray-600">2 days ago</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
-                  <div className="p-2 bg-green-100 rounded-lg">
-                    <BookOpen className="h-4 w-4 text-green-600" />
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-gray-900">Returned "1984"</p>
-                    <p className="text-sm text-gray-600">5 days ago</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-              </>
-            )}
           </div>
         </div>
       </div>
