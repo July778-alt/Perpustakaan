@@ -1,22 +1,8 @@
 # Livra
 
-<p align="center">
-  <img src="./assets/banner.png" width="100%" alt="Livra Banner">
-</p>
-
-<p align="center">
-  <strong>Digital Library Management System</strong>
-</p>
-
-<p align="center">
-  A web-based library platform designed to simplify book discovery, borrowing, and library management.
-</p>
-
----
-
 ## Overview
 
-**Livra** is a digital library management system built to provide a simple and organized experience for both library users and administrators.
+Livra is a digital library management system built to provide a simple and organized experience for both library users and administrators.
 
 The platform allows users to browse available books, search for specific titles, manage their borrowing activity, and track borrowing history. Administrators can manage books, users, and borrowing transactions through a dedicated management system.
 
@@ -76,31 +62,6 @@ Livra was developed as a learning project to explore full-stack web development,
 
 ---
 
-## System Architecture
-
-```text
-                ┌─────────────────────┐
-                │      Livra Web      │
-                │  Next.js + React    │
-                └──────────┬──────────┘
-                           │
-                           │ REST API
-                           ▼
-                ┌─────────────────────┐
-                │      Backend        │
-                │ Express.js + Node   │
-                └──────────┬──────────┘
-                           │
-                           │ SQL
-                           ▼
-                ┌─────────────────────┐
-                │       MySQL         │
-                │      Database       │
-                └─────────────────────┘
-```
-
----
-
 ## Project Structure
 
 ```text
@@ -123,81 +84,6 @@ livra/
 ├── README.md
 └── ...
 ```
-
----
-
-## User Flow
-
-```text
-Register / Login
-       │
-       ▼
-     Home
-       │
-       ├───────────────┐
-       ▼               ▼
-   Browse Books      Search
-       │
-       ▼
-  Book Details
-       │
-       ▼
-     Borrow
-       │
-       ▼
- Borrowing Status
-       │
-       ▼
- Borrowing History
-```
-
----
-
-## Database Overview
-
-The system uses MySQL to store and manage application data such as:
-
-```text
-Users
-  │
-  ├── Authentication
-  ├── Profile
-  └── Role
-       │
-       ▼
-     Books
-       │
-       ▼
-   Borrowings
-       │
-       └── Borrowing Status
-```
-
-The database structure was designed to keep user, book, and borrowing data organized while maintaining relationships between related entities.
-
----
-
-## Screenshots
-
-### Homepage
-
-<p align="center">
-  <img src="./assets/home.png" width="90%" alt="Livra Homepage">
-</p>
-
-### Book Details
-
-<p align="center">
-  <img src="./assets/book-detail.png" width="90%" alt="Livra Book Details">
-</p>
-
-### Dashboard
-
-<p align="center">
-  <img src="./assets/dashboard.png" width="90%" alt="Livra Dashboard">
-</p>
-
-> Replace the image paths above with screenshots from your actual project.
 
 ---
 
